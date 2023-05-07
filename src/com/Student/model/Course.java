@@ -6,24 +6,28 @@ public class Course {
 	private int fee;
 	private String duration;
 	private int totalseat;
+	private int availableSeat;
 	
 	public Course() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Course(int cid, String cname, int fee, String duration, int totalseat) {
+	public Course(int cid, String cname, int fee, String duration, int totalseat, int availableSeat) {
 		super();
 		this.cid = cid;
 		this.cname = cname;
 		this.fee = fee;
 		this.duration = duration;
 		this.totalseat = totalseat;
+		this.availableSeat=availableSeat;
 	}
+
+	
 
 	@Override
 	public String toString() {
 		return "Course [cid=" + cid + ", cname=" + cname + ", fee=" + fee + ", duration=" + duration + ", totalseat="
-				+ totalseat + "]";
+				+ totalseat + ", availableSeat=" + availableSeat + "]";
 	}
 
 	public int getCid() {
@@ -66,5 +70,12 @@ public class Course {
 		this.totalseat = totalseat;
 	}
 	
+	public int getAvailableSeat() {
+		return availableSeat;
+	}
+
+	public void setAvailableSeat(int availableSeat) {
+		this.availableSeat = availableSeat;
+	}
 
 }

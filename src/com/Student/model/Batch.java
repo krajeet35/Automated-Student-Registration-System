@@ -4,21 +4,26 @@ public class Batch {
 	private int batchId;
 	private int cid;
 	private int batchSeat;
+	private int AvailableBatchSeat;
 	
 	public Batch() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Batch(int batchId, int cid, int batchSeat) {
+	public Batch(int batchId, int cid, int batchSeat, int AvailableBatchSeat) {
 		super();
 		this.batchId = batchId;
 		this.cid = cid;
 		this.batchSeat = batchSeat;
+		this.AvailableBatchSeat=AvailableBatchSeat;
 	}
+
+	
 
 	@Override
 	public String toString() {
-		return "Batch [batchId=" + batchId + ", cid=" + cid + ", batchSeat=" + batchSeat + "]";
+		return "Batch [batchId=" + batchId + ", cid=" + cid + ", batchSeat=" + batchSeat + ", AvailableBatchSeat="
+				+ AvailableBatchSeat + "]";
 	}
 
 	public int getBatchId() {
@@ -45,6 +50,13 @@ public class Batch {
 		this.batchSeat = batchSeat;
 	}
 	
+	public int getAvailableBatchSeat() {
+		return AvailableBatchSeat;
+	}
+
+	public void setAvailableBatchSeat(int AvailableBatchSeat) {
+		this.AvailableBatchSeat = AvailableBatchSeat;
+	}
 	
 
 }

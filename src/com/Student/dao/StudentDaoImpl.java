@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -98,7 +99,7 @@ public class StudentDaoImpl implements StudentDao {
 
 	@Override
 	public List<Course> availableCourseAndSeat() throws CourseException {
-		List<Course> ls = null;
+		List<Course> ls = new ArrayList<>();
 		Course c= new Course();
 		try(Connection conn= DBUtil.provideConnection()){
 			PreparedStatement ps = conn.prepareStatement("select * from course");
@@ -109,6 +110,7 @@ public class StudentDaoImpl implements StudentDao {
 				c.setFee(rs.getInt("fee"));
 				c.setDuration(rs.getString("duration"));
 				c.setTotalseat(rs.getInt("totalSeat"));
+				c.setAvailableSeat(rs.getInt("availableseat"));
 				ls.add(c);
 			}
 			if(ls==null || ls.size()==0 ) {
@@ -159,7 +161,7 @@ public class StudentDaoImpl implements StudentDao {
 			ps1.setInt(1, cid);
 			ResultSet rs= ps1.executeQuery();
 			if(rs.next()) {
-				int seat= rs.getInt("totalSeat");
+				int seat= rs.getInt("availableSeat");
 				if(seat>0) {
 					PreparedStatement ps= conn.prepareStatement("insert into student_course values(?,?)");
 					ps.setInt(2, cid);
@@ -167,7 +169,7 @@ public class StudentDaoImpl implements StudentDao {
 					int x=ps.executeUpdate();
 					if(x>0) {
 						result =roll+" is enrolled in Course Id "+cid+" Successfully";
-						PreparedStatement ps3= conn.prepareStatement("update course set totalSeat=totalSeat-1 where cid=?");
+						PreparedStatement ps3= conn.prepareStatement("update course set availableSeat=availableSeat-1 where cid=?");
 						ps3.setInt(1, cid);
 					    ps3.executeUpdate();
 					}

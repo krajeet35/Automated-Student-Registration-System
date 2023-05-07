@@ -26,7 +26,7 @@ public interface AdminDao {
 	
 	public String studentEnrollInBatch(Student_Batch studentBatch) throws BatchException;
 	
-	public String updateBatchSeat(int newSeat, int cid) throws BatchException;
+	public String updateBatchSeat(int newSeat, int bid) throws BatchException;
 	
 	public List<Student> allStudentOfAllBatch() throws BatchException;
 
