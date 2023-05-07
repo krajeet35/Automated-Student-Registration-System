@@ -155,16 +155,35 @@ public class StudentDaoImpl implements StudentDao {
 		String result= "Not enrolled";
 		
 		try(Connection conn= DBUtil.provideConnection()){
-			PreparedStatement ps= conn.prepareStatement("insert into student_course values(?,?)");
-			ps.setInt(2, cid);
-			ps.setInt(1, roll);
-			int x=ps.executeUpdate();
-			if(x>0) {
-				result =roll+" is enrolled in Course Id "+cid+" Successfully";
+			PreparedStatement ps1= conn.prepareStatement("select * from course where cid=?");
+			ps1.setInt(1, cid);
+			ResultSet rs= ps1.executeQuery();
+			if(rs.next()) {
+				int seat= rs.getInt("totalSeat");
+				if(seat>0) {
+					PreparedStatement ps= conn.prepareStatement("insert into student_course values(?,?)");
+					ps.setInt(2, cid);
+					ps.setInt(1, roll);
+					int x=ps.executeUpdate();
+					if(x>0) {
+						result =roll+" is enrolled in Course Id "+cid+" Successfully";
+						PreparedStatement ps3= conn.prepareStatement("update course set totalSeat=totalSeat-1 where cid=?");
+						ps3.setInt(1, cid);
+					    ps3.executeUpdate();
+					}
+					else {
+						throw new CourseException("Invalid roll");
+					}
+				}
+				else {
+					result="Seat is not available in this course with cid "+cid;
+				}
 			}
 			else {
-				throw new CourseException("Invalid cid or roll");
+				throw new CourseException("No course found with cid "+cid);
 			}
+			
+			
 		}
 		catch(SQLException e) {
 			e.printStackTrace();
