@@ -15,7 +15,7 @@ public interface StudentDao {
 	
 	public String  enrollInCourse(int cid,int roll) throws CourseException;
 	
-	public String updateDetails() throws StudentException;
+	public String updateDetails(int n, int roll) throws StudentException;
 	
 	public List<Course> availableCourseAndSeat() throws CourseException;
 

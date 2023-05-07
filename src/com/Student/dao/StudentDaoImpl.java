@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Scanner;
 
 import com.Student.exceptions.CourseException;
 import com.Student.exceptions.StudentException;
@@ -38,15 +39,88 @@ public class StudentDaoImpl implements StudentDao {
 	}
 
 	@Override
-	public String updateDetails() throws StudentException {
-		// TODO Auto-generated method stub
-		return null;
+	public String updateDetails(int n, int roll) throws StudentException {
+		String result= "Not updated...";
+		Scanner sc = new Scanner(System.in);
+		try(Connection conn= DBUtil.provideConnection()){
+			PreparedStatement ps1= conn.prepareStatement("select * from student where roll=?");
+			ps1.setInt(1, roll);
+			ResultSet rs= ps1.executeQuery();
+			if(rs.next()) {
+				
+			if(n==1) {
+				String name1=rs.getString("sname");
+				System.out.println("Your current name "+name1);
+				System.out.println("enter new name: ");
+				String name=sc.nextLine();
+				PreparedStatement ps= conn.prepareStatement("update student set sname=? where roll=?");
+				ps.setString(1, name);
+				ps.setInt(2, roll);
+				result ="name updated sucessfully...";
+				
+			}
+			else if(n==2) {
+				String email1=rs.getString("semail");
+				System.out.println("Your current email "+email1);
+				System.out.println("enter new email: ");
+				String email=sc.nextLine();
+				PreparedStatement ps= conn.prepareStatement("update student set semail=? where roll=?");
+				ps.setString(1, email);
+				ps.setInt(2, roll);
+				result= "Roll updated Successfully...";
+			}
+			else if(n==3) {
+				String pass1=rs.getString("spassword");
+				System.out.println("Your current name "+pass1);
+				System.out.println("enter new password: ");
+				String pass=sc.nextLine();
+				PreparedStatement ps= conn.prepareStatement("update student set spassword=? where roll=?");
+				ps.setString(1, pass);
+				ps.setInt(2, roll);
+				result="Password updated successfully...";
+			}
+			else {
+				throw new StudentException("Invalid input.....");
+			}
+		  }
+			else {
+				throw new StudentException("Student not found with roll "+roll);
+			}
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+			throw new StudentException(e.getMessage());
+		}
+		
+		
+		return result;
 	}
 
 	@Override
 	public List<Course> availableCourseAndSeat() throws CourseException {
-		// TODO Auto-generated method stub
-		return null;
+		List<Course> ls = null;
+		Course c= new Course();
+		try(Connection conn= DBUtil.provideConnection()){
+			PreparedStatement ps = conn.prepareStatement("select * from course");
+			ResultSet rs= ps.executeQuery();
+			while(rs.next()) {
+				c.setCid(rs.getInt("cid"));
+				c.setCname(rs.getString("cname"));
+				c.setFee(rs.getInt("fee"));
+				c.setDuration(rs.getString("duration"));
+				c.setTotalseat(rs.getInt("totalSeat"));
+				ls.add(c);
+			}
+			if(ls==null || ls.size()==0 ) {
+				throw new CourseException("Course is not available....");
+			}
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+			throw new CourseException(e.getMessage());
+		}
+		
+		return ls;
 	}
 
 	@Override
